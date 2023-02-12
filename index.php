@@ -1,10 +1,20 @@
 <?php
-    session_start();
+    
+session_start();
 
-    date_default_timezone_set('Asia/Seoul');
+use src\App\Route;
 
-    define("__ROOT", __DIR__);
-    define("__DS", "/");
-    define("__SRC" , __ROOT . __DS . 'src');
-    define("__VIEWS", __SRC . __DS . 'views');
+date_default_timezone_set('Asia/Seoul');
+
+define('__ROOT', __DIR__);
+define('__DS', '/');
+define('__SRC', __ROOT . __DS . 'src');
+define('__VIEWS', __SRC . __DS . 'view');
+define('__UPLOAD', __DIR__ . __DS . 'uploads');
+
+require __ROOT . __DS . 'autoloader.php';
+require __ROOT . __DS . 'lib.php';
+require __ROOT . __DS . 'web.php';
+
+Route::init();
 ?>

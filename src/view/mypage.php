@@ -1,7 +1,6 @@
 <?php
 
-require_once('./resources/php/header.php');
-
+use src\App\DB;
 // 최단 경로 노드, 간선 준비
 $sql = "SELECT * FROM distances";
 $list = DB::fetchAll($sql);
@@ -48,6 +47,7 @@ function getTime($dis, $taking_at, $tran)
 function getMin($start, $end)
 {
     global $distance;
+    print_r($distance);
 
     // 지역 번호가 79까지 있으므르 79까지 배열 생성
     $ans = array_fill(1, 79, "INF");
@@ -105,15 +105,15 @@ function DFS($start, $end, $distance)
 }
 
 // 로그인하지 않았다면 로그인 페이지로 보냅니다
-if (!isset($_SESSION['user'])) {
+if (!user()) {
     header('location: ./login.php');
 }
 
 // 유저의 아이디를 불러옵니다.
-$id = $_SESSION['user']['id'];
+$id = user()->id;
 
 // 유저가 고객이라면 실행합니다.
-if ($_SESSION['user']['type'] == 'normal') :
+if (user()->type == 'normal') :
     // 주문영역을 구현하는데 필요한 sql문입니다. GROUP_CONCAT을 사용한 부분은 나중에 explode로 분할해줘야하기에 바로 이름으로 불러오면 구분자가 포함될 시 버그가 날 수 있기에
     // 빵의 이름으로 불러오지않고 id로 불러옵니다.
     $sql = "
@@ -384,7 +384,7 @@ if ($_SESSION['user']['type'] == 'normal') :
 
 <?php
 // 유저가 사장일시 실행합니다.
-elseif ($_SESSION['user']['type'] == 'owner') :
+elseif (user()->type == 'owner') :
     // 자신의 가게에 들어온 주문 리스트를 불러오는 sql입니다. GROUP_CONCAT은 출력할때는 explode로 분할합니다.
     $sql = "SELECT orderer.name, deliveries.id deliveries_id, concat(locations.borough, ' ', locations.name) as location_name, ".
     // 주문자 이름, 주문 번호, 주문자 주소를 불러옵니다.
@@ -653,8 +653,8 @@ elseif ($_SESSION['user']['type'] == 'owner') :
     </section>
 
 <?php
-// 유저가 라이더일시 실행합니다.
-elseif ($_SESSION['user']['type'] == 'rider') :
+// 유저가 라이더일시 실  행합니다.
+elseif (user()->type == 'rider') :
     // 다른 라이더가 받지 않은 주문을 가져오는 sql입니다 시간 순대로 정렬되어 있습니다.
     $sql = "SELECT stores.name as store_name,
     (SELECT concat(locations.borough, locations.name) FROM locations WHERE locations.id = owner_.location_id) as store_location,  ".
@@ -707,7 +707,7 @@ elseif ($_SESSION['user']['type'] == 'rider') :
 
             <div>
                 <form action= "./change_userinfo.php" method="POST">
-                    <input type="hidden" name="id" value="<?= $_SESSION['user']['id'] ?>">
+                    <input type="hidden" name="id" value="<?= user()->id ?>">
                     <div class="d-flex justify-content-center">
                         <!-- 내 교통수단이나 위치를 변경할 수 있는 영역입니다. 내 정보 수정을 누르면 수정됩니다. -->
                         <p class="p-3">
@@ -715,10 +715,10 @@ elseif ($_SESSION['user']['type'] == 'rider') :
                             <select name="transportation" id="transportation">
                                 <?php
                                 // 유저의 교통수단을 불러옵니다.
-                                $_SESSION['user']['trans'] = DB::fetch("SELECT transportation FROM users WHERE id='{$id}';")->transportation;
+                                user()->transportation = DB::fetch("SELECT transportation FROM users WHERE id='{$id}';")->transportation;
 
                                 // 유저의 교통수단이 select에서 선택되어 있게 합니다.
-                                if ($_SESSION['user']['trans'] == 'bike') {
+                                if (user()->transportation == 'bike') {
                                     echo '<option value="bike" selected>자전거</option>
                                         <option value="motorcycle">오토바이</option>';
                                 } else {
@@ -734,9 +734,8 @@ elseif ($_SESSION['user']['type'] == 'rider') :
                             <select name="location" id="location">
                                 <?php
                                 // 유저의 주소가 select에서 선택되어 있게 하고 다른 모든 주소를 출력합니다.
-                                $_SESSION['user']['location'] = DB::fetch("SELECT location_id FROM users WHERE id='{$id}';")->location_id;
                                 foreach (DB::fetchAll("SELECT * FROM locations") as $location) {
-                                    if ($_SESSION['user']['location'] == $location->id) {
+                                    if (user()->location_id == $location->id) {
                                         echo "<option value='{$location->id}}' selected>{$location->borough} {$location->name}</option>";
                                     } else {
                                         echo "<option value='{$location->id}}'>{$location->borough} {$location->name}</option>";
@@ -800,7 +799,7 @@ elseif ($_SESSION['user']['type'] == 'rider') :
                                     <?php
                                     // 받은, 받았던 주문일시 예상시간을 출력합니다.
                                     if ($log->state == 'taking' || $log->state == 'complete') {
-                                        echo getTime(getMin($log->orderer_location_id, $log->store_location_id) + getMin($_SESSION['user']['location'], $log->store_location_id), $log->taking_at,  $_SESSION['user']['trans']);
+                                        echo getTime(getMin($log->orderer_location_id, $log->store_location_id) + getMin(user()->location_id, $log->store_location_id), $log->taking_at,  user()->transportation);
                                     }
                                     ?>
 
@@ -839,14 +838,10 @@ elseif ($_SESSION['user']['type'] == 'rider') :
                                     <?php endif; ?>
                                 </td>
                             </tr>
-                        <?php endforeach; ?>
+                        <?php endforeach;
+                        endif; ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </section>
-
-<?php
-endif;
-require_once('./resources/php/footer.php');
-?>

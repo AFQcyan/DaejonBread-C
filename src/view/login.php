@@ -1,9 +1,3 @@
-<?php
-
-require_once('./resources/php/header.php');
-
-?>
-
 <div class="subpage_section">
     <?php
     // 이미 로그인이 되어 있지 않으면 로그인을 할 수 있는 폼을 띄웁니다.
@@ -11,7 +5,7 @@ require_once('./resources/php/header.php');
         echo "<h1 class='alrdy'>이미 로그인 되어 있습니다.<h1>";
     else:
     ?>
-        <form action="./login_ok.php" method="post">
+        <form action="/login_ok" method="post">
             <div class="form-group">
                 <label for="userid">ID</label>
                 <input type="text" id="userid" name="id" class="form-control" placeholder="아이디를 입력하세요.">
@@ -27,8 +21,3 @@ require_once('./resources/php/header.php');
         </form>
     <?php endif;?>
 </div>
-
-
-<?php
-require_once('./resources/php/footer.php');
-?>

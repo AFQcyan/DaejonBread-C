@@ -1,6 +1,6 @@
 <?php
 
-require_once('./resources/php/header.php');
+// require_once('./resources/php/header.php');
 
 ?>
     <script src="./resources/js/map.js"></script>
@@ -570,7 +570,7 @@ require_once('./resources/php/header.php');
         </section>
 <?php
 
-require_once('./resources/php/footer.php');
+// require_once('./resources/php/footer.php');
 
 ?>
 </body>

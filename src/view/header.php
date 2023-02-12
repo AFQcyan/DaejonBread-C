@@ -1,8 +1,3 @@
-<?php
-
-require_once($_SERVER['DOCUMENT_ROOT'] . "/resources/php/lib.php");
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,11 +5,11 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/resources/php/lib.php");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>대전브레드투어</title>
+    <title><?php echo $title . "페이지" ?></title>
     <link rel="stylesheet" href="./resources/css/bootstrap.min.css">
     <link rel="stylesheet" href="./resources/fontawesome/css/font-awesome.min.css">
-    <!-- <link rel="stylesheet" href="./resources/css/style.css"> -->
     <link rel="stylesheet" href="./resources/css/prac.css">
+    <script src="./resources/jQuery/jquery-3.6.0.min.js"></script>
     <script src="./resources/js/bootstrap.js"></script>
 </head>
 <body>
@@ -33,15 +28,19 @@ require_once($_SERVER['DOCUMENT_ROOT'] . "/resources/php/lib.php");
                         <a href="./discount.php">할인 이벤트</a>
                     </li>
                     <li>
-                        <a href="./myPage.php">마이 페이지</a>
+                        <a href="/myPage">마이 페이지</a>
                     </li>
                     <li>
                     <?php
                     if(isset($_SESSION['user'])):?>
-                        <li><a href='#'><?=print_text('<' . $_SESSION['user']['name'] . '>' . '(<'. $_SESSION['user']['type'] .'>)')?></a></li>
-                        <li><a href='logout.php'>로그아웃</a></li>
+                        <li><a href='#'><<?php echo user()->name?>>(<<?php 
+                            if(user()->type == 'owner'){echo "사장님";}                        
+                            else if(user()->type == 'rider'){echo "라이더";}                        
+                            else if(user()->type == 'normal'){echo "고객";}                        
+                        ?>>)</a></li>
+                        <li><a href='/logout'>로그아웃</a></li>
                         <?php else:?>
-                        <li><a href="login.php">로그인</a></li>
+                        <li><a href="/login">로그인</a></li>
                         <?php endif;?>
                         </li>
                 </ul>                                
