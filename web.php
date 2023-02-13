@@ -8,16 +8,18 @@ Route::get('/login', 'ViewController@login');
 Route::get('/logout', 'UserController@logout');
 
 // 스토어
-Route::get('/store', 'ViewController@store');
 
 // 캡차 이미지
-Route::get('/captcha', 'ViewController@captcha');
 
 if(user()){
-    // 온라인 집들이
+    // 마이페이지 -> 고객
     Route::get('/myPage', 'ViewController@myPage');
-    Route::get('/houses/list', 'ViewController@houses_list');
+    Route::post('/insert/review', 'ReviewController@insert');
+    Route::post('/insert/grade', 'ReviewController@grade');
 
+    //마이페이지 -> 사장님
+    Route::post('/accept', 'OrderController@accept');
+    Route::post('/deny', 'OrderController@deny');
     // 전문가
     Route::get('/specia', 'ViewController@specia');
 
@@ -29,11 +31,3 @@ if(user()){
     Route::get('/user/logout', 'UserController@logout');
 }
 Route::post('/login_ok', 'UserController@login');
-
-Route::post('/house/insert', 'InsertController@house');
-Route::post('/house/review', 'InsertController@house_review');
-
-Route::post('/review/insert', 'InsertController@review');
-
-Route::post('/req_quote/insert', 'InsertController@req_quote');
-Route::post('/resp_quote/insert', 'InsertController@resp_quote');

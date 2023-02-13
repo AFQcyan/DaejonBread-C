@@ -28,7 +28,7 @@ function timeFomatChange($time)
 function getTime($dis, $taking_at, $tran)
 {
     $time = 0;
-
+    
     // 교통수단이 자전거일시 속도가 15km/h 아니면 50km/h
     if ($tran == 'bike') {
         $time = $dis / 15;
@@ -44,11 +44,8 @@ function getTime($dis, $taking_at, $tran)
 }
 
 // 시작점과 도착점을 받아서 시작점에서 도착점으로 가는 가장 빠른 길의 거리를 구하는 함수입니다.
-function getMin($start, $end)
+function getMin($distance ,$start, $end)
 {
-    global $distance;
-    print_r($distance);
-
     // 지역 번호가 79까지 있으므르 79까지 배열 생성
     $ans = array_fill(1, 79, "INF");
     // 첫 노드는 거리를 0으로 설정
@@ -105,8 +102,8 @@ function DFS($start, $end, $distance)
 }
 
 // 로그인하지 않았다면 로그인 페이지로 보냅니다
-if (!user()) {
-    header('location: ./login.php');
+if (!$_SESSION['user']) {
+    header('location: /login');
 }
 
 // 유저의 아이디를 불러옵니다.
@@ -198,10 +195,7 @@ if (user()->type == 'normal') :
                                 도착 예정 시간
                             </th>
                             <th>
-                                리뷰 버튼
-                            </th>
-                            <th>
-                                평점 버튼
+                                리뷰 / 평점
                             </th>
                             <th>
                                 주문 상태
@@ -241,31 +235,34 @@ if (user()->type == 'normal') :
                                     <?php
                                     // 라이더 이름이 있다면 도착 예정시간을 구해서 출력합니다.
                                     if (!is_null($obj->rider_name)) {
-                                        getTime(getMin($obj->location_id, $obj->store_location) + getMin($obj->rider_location, $obj->store_location), $obj->order_at, $obj->rider_transportation);
+                                        getTime(getMin($distance ,$obj->location_id, $obj->store_location) + getMin($distance, $obj->rider_location, $obj->store_location), $obj->order_at, $obj->rider_transportation);
                                     }
                                     ?>
                                 </td>
-                                <td>
+                                <td class='review_buttons'>
                                     <!-- 지금까지 쓴 리뷰가 없다면 리뷰를 쓸 수 있는 모달창과 버튼을 생성합니다 -->
                                     <?php
-                                    if ($obj->reiview == 0) :
+                                    $complList = DB::fetchAll("SELECT store_id, user_id FROM reviews WHERE store_id = ? AND user_id = ?", [$obj->store_id,user()->id]);                                  
+                                    if ($obj->state == 'complete' && !$complList) :
                                     ?>
 
-                                        <button class='btn btn-info' data-toggle='modal' data-target='#myModal' tabindex="-1" aria-hidden="true" >리뷰</button>
+                                        <button class='button buttonhlt p-2' data-toggle='modal' data-target='#myModal' tabindex="-1" aria-hidden="true" >리뷰</button>
                                         <div class="modal fade" id="myModal">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
-                                                <form action= "./review.php" method="post" enctype="multipart/form-data">
-        
+                                                <form action= "/insert/review" method="post" enctype="multipart/form-data">
+                                                <div class="modal-header">
                                                     <input type="hidden" name="id" value="<?= $obj->store_id ?>">
-        
+                                                    <h3>리뷰 작성</h3>
+                                                </div>
+                                                <div class="modal-body">
                                                     <div class="d-flex align-items-center p-3 border-bottom border-secondary">
-                                                        <p class="col-2">제목</p>
-                                                        <input class="col-10" type="text" name="title" value="제목" required>
+                                                        <p class="col-2">제목<span class="must_req">*</span></p>
+                                                        <input class="col-10" type="text" name="title" value="" placeholder='제목을 입력해주세요.' required>
                                                     </div>
         
                                                     <div class="d-flex align-items-center p-3 border-bottom border-secondary">
-                                                        <p class="col-2">본문</p>
+                                                        <p class="col-2">본문<span class="must_req">*</span></p>
                                                         <textarea class="col-10" name="content" rows="10" required></textarea>
                                                     </div>
         
@@ -273,10 +270,15 @@ if (user()->type == 'normal') :
                                                         <p class="col-2">파일 선택</p>
                                                         <input class="col-10" type="file" name="img">
                                                     </div>
+                                                </div>
+                                                <div class="modal-footer">
                                                     <div class="mt-3">
                                                         <a href="#" class="button buttonhlt" data-dismiss="modal">닫기</a>
                                                         <input class="button buttonhlt" type="submit" value="업로드">
                                                     </div>
+                                                </div>
+        
+         
                                                 </div>
                                                 </form>
                                             </div>
@@ -285,28 +287,35 @@ if (user()->type == 'normal') :
                                         </div>
 
                                     <?php endif; ?>
-
-                                </td>
-                                <td>
                                     <!-- 지금까지 준 점수가 없다면 점수를 줄 수 있는 모달창과 버튼을 생성합니다. -->
                                     <?php
                                     if ($obj->score == '0') :
                                     ?>
 
-                                        <a href="#g<?= $obj->location_id ?>" class='btn btn-info'>평점</a>
+                                        <button class='button buttonhlt p-2' data-toggle='modal' data-target='#g<?= $obj->location_id ?>' tabindex="-1" aria-hidden="true" >평점</button>
                                         <div class="modal fade" id="g<?= $obj->location_id ?>">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form action= "/insert/grade" method="post">
+                                                        <div class="modal-header">
+                                                            <input type="hidden" name="id" value="<?= $obj->store_id ?>">
+                                                            <div>줄 점수를 입력해주세요</div>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="d-flex justify-content-center mt-3">
+                                                                <input type="number" name="score" max="5" min="0" value="0" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <div class="d-flex justify-content-between">
+                                                                <a href="#" class="button buttonhlt m-1" data-dismiss='modal' data-target='#g<?= $obj->location_id ?>'>닫기</a>
+                                                                <input type="submit" class="button buttonhlt m-1" value="확인">
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
                                             <div>
-                                                <form action= "./score.php" method="post">
-                                                    <input type="hidden" name="id" value="<?= $obj->store_id ?>">
-                                                    <div>줄 점수를 입력해주세요</div>
-                                                    <div class="d-flex justify-content-center mt-3">
-                                                        <input type="number" name="score" max="5" min="0" value="0" required>
-                                                    </div>
-                                                    <div class="d-flex justify-content-between">
-                                                        <a href="#" class="button buttonhlt m-1">닫기</a>
-                                                        <input type="submit" class="button buttonhlt m-1" value="확인">
-                                                    </div>
-                                                </form>
                                             </div>
                                         </div>
 
@@ -429,7 +438,7 @@ elseif (user()->type == 'owner') :
             </div>
 
             <div>
-                <table class="table table-bordered">
+                <table class="table table-bordered owner_order_list">
                     <thead>
                         <tr>
                             <th>
@@ -468,7 +477,7 @@ elseif (user()->type == 'owner') :
                                     <?php
                                     // 라이더가 있다면 예상도착 시간을 구합니다.
                                     if (!is_null($obj->rider_name)) {
-                                        getTime(getMin($obj->orderer_location, $obj->store_location) + getMin($obj->rider_location, $obj->store_location), $obj->order_at, $obj->rider_transportation);
+                                        getTime(getMin($distance, $obj->orderer_location, $obj->store_location) + getMin($distance, $obj->rider_location, $obj->store_location), $obj->order_at, $obj->rider_transportation);
                                     }
                                     ?>
                                 </td>
@@ -488,17 +497,17 @@ elseif (user()->type == 'owner') :
 
                                     ?>
                                 </td>
-                                <td>
+                                <td class='order_state'>
 
                                     <?php
                                     // 상태에 따라 수락, 거절 버튼 또는 수락한 주문, 거절한 주문, 배달 중, 배달 완료 등을 출력합니다.
-                                    $a =  ['order' => "<form action='./accept.php' method='post'>
+                                    $a =  ['order' => "<form action='/accept' method='post'>
                                                 <input type='hidden' name='id' value='{$obj->deliveries_id}'>
-                                                <input type='submit' value='수락' class='btn btn-info'>
+                                                <input type='submit' value='수락' class='button buttonhlt px-4'>
                                             </form>
-                                            <form action='./reject.php' method='post'>
+                                            <form action='/deny' method='post'>
                                                 <input type='hidden' name='id' value='{$obj->deliveries_id}'>
-                                                <input type='submit' value='거절' class='btn btn-info'>
+                                                <input type='submit' value='거절' class='button buttonhlt px-4'>
                                             </form>
                                         ", 'accept' => '수락한 주문', 'reject' => '거절한 주문', 'taking' => '배달 중', 'complete' => '배달 완료'];
                                     echo $a[$obj->state];
@@ -562,7 +571,7 @@ elseif (user()->type == 'owner') :
                                     <?= $obj->reservation_at ?>
                                 </td>
                                 <td>
-                                    <div class="d-flex">
+                                    <div class="d-flex justify-content-around">
                                         <?php
                                         // 상태에 따라 수락, 거절 버튼 또는 수락한 주문, 거절한 주문, 배달 중, 배달 완료 등을 출력합니다.
                                         $a =  ['order' => "<form action='./accept_reservation.php' method='post'>
@@ -620,12 +629,23 @@ elseif (user()->type == 'owner') :
                         ?>
                             <!-- 할인률을 설정하는 모달팝업입니다. -->
                             <div class="modal fade" id="discount<?= $product->id ?>" tabindex='-1' aria-hidden="true" >
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <form action= "/discount" method="post">
+                                            <input type="hidden" name="id" value="<?= $product->id ?>">
+                                            <div class="modal-header">
+                                                <h1>할인율 설정</h1>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>할인률 : <input type="number" min="0" max="99" name="number" required>%</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="button buttonhlt">확인</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                                 <div>
-                                    <form action= "./discount_set.php" method="post">
-                                        <input type="hidden" name="id" value="<?= $product->id ?>">
-                                        <p>할인률 : <input type="number" min="0" max="99" name="number" required>%</p>
-                                        <button type="submit" class="btn btn-primary">확인</button>
-                                    </form>
                                 </div>
                             </div>
                             <tr>
@@ -642,7 +662,7 @@ elseif (user()->type == 'owner') :
                                 <!-- 총 팔린 갯수를 가져와서 출력합니다. -->
                                 <td><?= DB::fetch("SELECT COUNT(delivery_items.cnt) count FROM delivery_items WHERE '{$product->id}' = delivery_items.bread_id; AND ")->count; ?>개</td>
                                 <td>
-                                    <button data-toggle='modal' data-target="#discount<?= $product->id ?>" class="btn btn-primary">할인</a>
+                                    <button data-toggle='modal' data-target="#discount<?= $product->id ?>" class="button buttonhlt">할인</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -799,7 +819,7 @@ elseif (user()->type == 'rider') :
                                     <?php
                                     // 받은, 받았던 주문일시 예상시간을 출력합니다.
                                     if ($log->state == 'taking' || $log->state == 'complete') {
-                                        echo getTime(getMin($log->orderer_location_id, $log->store_location_id) + getMin(user()->location_id, $log->store_location_id), $log->taking_at,  user()->transportation);
+                                        echo getTime(getMin($distance, $log->orderer_location_id, $log->store_location_id) + /**/getMin($distance, user()->location_id, $log->store_location_id), $log->taking_at,  user()->transportation);
                                     }
                                     ?>
 

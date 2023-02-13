@@ -15,7 +15,7 @@
 <body>
     <header>
         <div class="container logo-line">
-            <a href="./index.php"><img src="./resources/img/logoA.png" alt="메인 로고" title="메인 로고"></a>
+            <a href="/"><img src="./resources/img/logoA.png" alt="메인 로고" title="메인 로고"></a>
             <nav>
                 <ul class="menu d-none d-lg-flex">
                     <li>
@@ -32,7 +32,7 @@
                     </li>
                     <li>
                     <?php
-                    if(isset($_SESSION['user'])):?>
+                    if(user()):?>
                         <li><a href='#'><<?php echo user()->name?>>(<<?php 
                             if(user()->type == 'owner'){echo "사장님";}                        
                             else if(user()->type == 'rider'){echo "라이더";}                        
@@ -55,7 +55,7 @@
         <div class="hamburg_container">
             <ul class="ham_nav">
                 <li>
-                    <a href="./sub.html">대전 빵집</a>
+                    <a href="/sub">대전 빵집</a>
                 </li>
                 <li>
                     <a href="./stamp.html">스탬프</a>
@@ -64,10 +64,10 @@
                     <a href="#">할인 이벤트</a>
                 </li>
                 <li>
-                    <a href="#">마이 페이지</a>
+                    <a href="/myPage">마이 페이지</a>
                 </li>
                 <li>
-                    <a href="#">로그인</a>
+                    <a href="/login">로그인</a>
                 </li>
                 <img src="./resources/img/logo-ham-in.png" alt="">
             </ul>            

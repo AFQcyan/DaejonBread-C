@@ -2,13 +2,14 @@
 
 namespace src\Controller;
 
+use src\App\DB;
 class ReviewController{
     function grade(){
         extract($_POST);
                 
         $score = $_POST['score']; // 입력한 점수
         $id = $_POST['id']; // 빵집의 아이디
-        $user = $_SESSION['user']['id']; // 유저 야이디
+        $user = user()->id; // 유저 야이디
         DB::fetch("INSERT INTO `grades`(`user_id`, `store_id`, `score`) VALUES ('{$user}','{$id}',{$score})");
 
         back('등록되었습니다.');
@@ -23,7 +24,7 @@ class ReviewController{
         //리뷰에 필수항목이 아닌 img가 있다면 이미지가 저장된 주소를 이 변수에 저장합니다
         $imageName = '';
 
-        if(isset($_FILES['img'])){
+        if($_FILES['img']['name'] === null){
             var_dump($_FILES['img']);
         
             //이미지를 복사해와서 저장한 뒤 주소를 저장합니다.
@@ -44,8 +45,8 @@ class ReviewController{
         }
 
         // 받은 정보들을 이용해 INSERT합니다.
-        $user = $_SESSION['user']['id'];
-        DB::fetch("INSERT INTO `reviews`(`title`, `contents`, `image`, `write_at`, `store_id`, `user_id`) VALUES ('{$title}','{$content}','{$imageName}', NOW(), '$id' ,'{$user}')");
+        $user = user()->id;
+        DB::fetch("INSERT INTO `reviews`(`title`, `contents`, `image`, `write_at`, `store_id`, `user_id`) VALUES ('{$title}','{$content}','{$imageName}', NOW(), '{$id}' ,'{$user}')");
 
         back('등록 되었습니다');
     }

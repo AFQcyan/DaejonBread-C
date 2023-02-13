@@ -4,22 +4,25 @@ html{
     height: 100%;
 }
 body{
-    width: 1440px;
-    height: 100%;
-    margin: 0 auto;
-    overflow-x: hidden;
     display: flex;
     flex-direction: column;
-}
-:root{
-    --color-very-light: #ffc3a1;
-    --color-light: #f0997d;
-    --color-dark: #c95064;
-    --color-very-dark: #a75d5d;
-    --border: rgb(155,155,155);
+    height: 100%;
+    width: 1440px;
+    margin: 0 auto;
+    overflow-x: hidden;
 }
 .main{
     flex: 1;
+}
+:root{
+    --color-very-light: #FFFBE9;
+    --color-light: #E3CAA5;
+    --color-dark: #CEAB93;
+    --color-very-dark: #AD8B73;
+    --border: rgb(211,211,211);
+}
+.wrapper{
+
 }
 img{
     object-fit: cover;
@@ -40,7 +43,6 @@ a, label{
 }
 header{
     width: 100%;
-    margin: 0 auto;
 }
 .logo-line{
     display: flex;
@@ -91,98 +93,12 @@ b{
 .title{
     font-size: 28px;
     font-weight: bold;
-    margin-bottom: 20px;
-}
-.table{
-    margin-top: 30px;
 }
 section:not(#visual){
     margin-top: 150px;
 }
 .contents{
     margin-top: 100px;
-}
-.main-section{
-    margin-top: 100px !important;
-}
-.item {
-    transition: all 0.5s;
-    cursor: pointer;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.item:hover {
-    transform: translateY(-20px);
-    box-shadow: 10px 17px 40px 0px rgb(0 0 0 / 25%);
-}
-
-.item img {
-    width: 100%;
-    height: 310px;
-    object-fit: cover;
-}
-
-.item .text {
-    position: relative;
-    display: block;
-    padding: 30px 25px;
-    background-color: #fff;
-    margin: 0;
-}
-.text a{
-    color: var(--color-light);
-}
-
-.item .text .title {
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--color-light);
-    margin-bottom: 15px;
-}
-
-.item .text .name {
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.item .text .content {
-    font-size: 15px;
-    color: #999;
-    overflow: hidden;
-    display: -webkit-box;
-}
-
-.item .text .icon {
-    position: absolute;
-    top: -15px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    padding-bottom: 10px;
-    background-color: #00d9b6;
-    color: #fff;
-    font-weight: bold;
-    border-radius: 10px;
-}
-
-.item .text .date {
-    margin-top: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.item .text .date span {
-    color: #b8c2cc;
-}
-
-.small-img{
-    width: 80px;
-    height: 80px;
 }
 /* 헤더 영역 */
 header{
@@ -382,6 +298,7 @@ header .menu li a:hover{
 }
 .intro.detail{
     margin-top: 50px;
+
 }
 .intro.detail img{
     width: 400px;
@@ -809,20 +726,27 @@ label[for="map5"]{
     }
 }
 /* 후원자 시작 */
-#sponser .contents{
+#sponser .contents .origin{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-column-gap: 100px;
 }
-.contents img{
+#sponser .contents img{
     width: 100%;
+    transition: 1s;
+}
+#sponser .contents img:hover{
+    transform: scale(120%);
 }
 /* 푸터 시작 */
 footer {
     padding: 40px 0px;
     background-color: #333;
     color: white;
-    width: 100%;
+    height: 300px;
+    position: relative;
+    /* transform: translateY(-100%); */
+    margin-top: 50px;
 }
 footer img{
     width: 350px;
@@ -1017,9 +941,328 @@ footer .row>div:last-child img{
         width: 400px;
         margin: 30px auto;
     }
+    /* 투어 코스 시작 */
+    .maps{
+        text-align: center;
+    }
+    label[for="map1"]{
+        top: 118px !important;
+        left: 146px !important;
+    }
+    label[for="map2"]{
+        top: 150px !important;
+        left: 267px !important;           
+    }
+    label[for="map3"]{
+        top: 221px !important;
+        left: 100px !important;                
+    }
+    label[for="map4"]{
+        top: 232px !important;
+        left: 323px !important;        
+    }
+    label[for="map5"]{
+        top: 283px !important;
+        left: 244px !important;
+    }
+    #tour .maps img{
+        width: 400px;
+        margin: 0 auto;
+    }
+    .maps-info{
+        width: 400px;
+        margin-top: 50px;
+    }
+    .mapinfo
+    .mapinfo.mapinfo.each-title{
+        font-size: 22px;
+    }
+    .mapinfo.layout{
+        width: 400px;
+    }
+    .mapinfo.hdr{
+        padding: 7px;
+    }
+    #tour .container{
+        height: auto;
+    }
+    #tour .container .contents{
+        display: block !important;        
+    }
+    /* 후원자 시작 */
+    #sponser{
+        width: 480px;
+        overflow: hidden;
+    }
+    #sponser .contents{
+        width: 7680px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    #sponser .contents .spon{
+        display: grid !important;
+        grid-template-columns: repeat(8 ,1fr) !important;
+        grid-column-gap: 0;
+        text-align: center;
+        width: 3840px;
+    }
+    #sponser .contents img{
+        width: 400px;
+        height: 100px;
+        position: relative;
+        object-fit: contain;
+        left: 35px;
+    }
+    #sponser .contents .origin{
+        animation: origin 50s infinite linear;
+    }
+    #sponser .contents .clone{
+        animation: clone 50s infinite linear;
+    }
+    @keyframes origin {
+        0%{
+            transform: translateX(0%);
+        }
+        5%{
+            transform: translateX(0%);
+        }
+        6.25%{
+            transform: translateX(-12.5%);
+        }
+        11.25%{
+            transform: translateX(-12.5%);
+        }                
+        12.5%{
+            transform: translateX(-25%);
+        }
+        17.5%{
+            transform: translateX(-25%);
+        }
+        18.75%{
+            transform: translateX(-37.5%);
+        }
+        23.75%{
+            transform: translateX(-37.5%);
+        }                
+        25%{
+            transform: translateX(-50%);
+        }
+        30%{
+            transform: translateX(-50%);
+        }
+        31.25%{
+            transform: translateX(-62.5%);
+        }
+        36.25%{
+            transform: translateX(-62.5%);
+        }                
+        37.5%{
+            transform: translateX(-75%);
+        }
+        42%{
+            transform: translateX(-75%);
+        }
+        43.75%{
+            transform: translateX(-87.5%);
+        }
+        48.75%{
+            transform: translateX(-87.5%);
+        }
+        50%{
+            transform: translateX(-100%);
+        }
+        50.01%{
+            transform: translateX(100%);
+        }
+        55%{
+            transform: translateX(100%);
+        }
+        56.25%{
+            transform: translateX(87.5%);
+        }
+        61.25%{
+            transform: translateX(87.5%);
+        }
+        62.5%{
+            transform: translateX(75%);
+        }
+        67.5%{
+            transform: translateX(75%);
+        }                
+        68.25%{
+            transform: translateX(62.5%);
+        }
+        73.25%{
+            transform: translateX(62.5%);
+        }
+        75%{
+            transform: translateX(50%);
+        }
+        80%{
+            transform: translateX(50%);
+        }
+        81.25%{
+            transform: translateX(37.5%);
+        }                
+        86.25%{
+            transform: translateX(37.5%);
+        }
+        87.5%{
+            transform: translateX(25%);
+        }
+        92.5%{
+            transform: translateX(25%);
+        }
+        93.75%{
+            transform: translateX(12.5%);
+        }
+        98.75%{
+            transform: translateX(12.5%);
+        }
+        100%{
+            transform: translateX(0%);
+        }
 
+    }
+    @keyframes clone {
+        0%{
+            transform: translateX(-0%);
+        }
+        5%{
+            transform: translateX(-0%);
+        }
+        6.25%{
+            transform: translateX(-12.5%);
+        }
+        11.25%{
+            transform: translateX(-12.5%);
+        }                
+        12.5%{
+            transform: translateX(-25%);
+        }
+        17.5%{
+            transform: translateX(-25%);
+        }
+        18.75%{
+            transform: translateX(-37.5%);
+        }
+        23.75%{
+            transform: translateX(-37.5%);
+        }                
+        25%{
+            transform: translateX(-50%);
+        }
+        30%{
+            transform: translateX(-50%);
+        }
+        31.25%{
+            transform: translateX(-62.5%);
+        }
+        36.25%{
+            transform: translateX(-62.5%);
+        }                
+        37.5%{
+            transform: translateX(-75%);
+        }
+        42%{
+            transform: translateX(-75%);
+        }
+        43.75%{
+            transform: translateX(-87.5%);
+        }
+        48.75%{
+            transform: translateX(-87.5%);
+        }
+        50%{
+            transform: translateX(-100%);
+        }
+        55%{
+            transform: translateX(-100%);
+        }
+        56.25%{
+            transform: translateX(-112.5%);
+        }
+        61.25%{
+            transform: translateX(-112.5%);
+        }
+        62.5%{
+            transform: translateX(-125%);
+        }
+        67.5%{
+            transform: translateX(-125%);
+        }                
+        68.75%{
+            transform: translateX(-137.5%);
+        }
+        73.75%{
+            transform: translateX(-137.5%);
+        }
+        75%{
+            transform: translateX(-150%);
+        }
+        80%{
+            transform: translateX(-150%);
+        }
+        81.25%{
+            transform: translateX(-162.5%);
+        }                
+        86.25%{
+            transform: translateX(-162.5%);
+        }
+        87.5%{
+            transform: translateX(-175%);
+        }
+        92.5%{
+            transform: translateX(-175%);
+        }
+        93.75%{
+            transform: translateX(-187.5%);
+        }
+        98.75%{
+            transform: translateX(-187.5%);
+        }
+        100%{
+            transform: translateX(-200%);
+        }
+    }
+    /* 푸터 */
+    footer .row>div:last-child img{
+        width: 40px;
+    }
+    footer .logo{
+        text-align: center;
+    }
+    .footer_link{
+        margin-left: 50px;
+    }
+    footer img{
+        width: 300px;
+    }
+    .footer_text{
+        width: 400px;
+        margin: 0 auto;
+    }
+    .footer_text *{
+        text-align: left;
+        justify-content: start;
+    }
+}
+/* 모달 */
+.modal-content{
+    border-radius: 10px;
+}
+.modal-content p{
+    font-weight: bold;
 }
 /* 제3 과제 */
+.must_req{
+    color: red;
+}
+.review_buttons{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
 .subpage_section{
     width: 80%;
     margin: 0 auto;
@@ -1031,7 +1274,31 @@ footer .row>div:last-child img{
     margin-top: 40%;
     font-weight: bold;
 }
+.normal_order{
+    height: 100%;
+}
+tbody{
+    height: 100%;
+}
+.normal_order tbody tr{
+    min-height: 200px;
+    height: 100%;
+}
+.normal_order tbody tr td{
+    vertical-align: middle !important;
+    height: 100%;
+}
 .normal_order th{
     font-size: 14px;
     text-align: center;
+}
+.order_state{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+    text-align: center;
+}
+.owner_order_list{
+    height: 100%;
 }
