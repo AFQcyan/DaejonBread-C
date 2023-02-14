@@ -1,20 +1,6 @@
 <?php
 
-require_once('./resources/php/header.php');
-
-// 주소가 잘못 됐다면 잘못된 접근이라고 출력합니다.
-if (!(isset($_GET['page']) && isset($_GET['id']))) {
-    echo '잘못된 접근 입니다.';
-    exit;
-}
-
-$pageId = $_GET['id'];
-
-// 로그인이 되지 않았다면 로그인 페이지로 이동합니다.
-if (!isset($_SESSION['user'])) {
-    header('location: ./login.php');
-    exit;
-}
+use src\App\DB;
 
 
 // stores의 id가 get으로 받아온 id와 동일한 가게의 리뷰 리스트를 전부 가져옵니다.
@@ -44,7 +30,7 @@ ORDER BY (SELECT COUNT(likes.id) FROM likes WHERE likes.review_id = reviews.id) 
         </div>
 
         <div class="d-flex justify-content-between position-relative">
-            <?php for ($i = $_GET['page'] * 2; $i < $_GET['page'] * 2 + 2 && $i < count($list); $i++) :  $obj = $list[$i];?>
+            <?php for ($i = $page * 2; $i < $page* 2 + 2 && $i < count($list); $i++) :  $obj = $list[$i];?>
                 <div class="col-5 item">
                     <?php if (!is_null($obj->image)) : ?>
                         <img src="./resources/img<?= print_text($obj->image) ?>" alt="image" title="image" width="50">
@@ -64,8 +50,8 @@ ORDER BY (SELECT COUNT(likes.id) FROM likes WHERE likes.review_id = reviews.id) 
                     </div>
                     <?php
                         // 만약 해당 리뷰에 공감을 하지 않았다면 공감을 할 수 있는 버튼을 출력합니다.
-                        $like = DB::fetch("SELECT * FROM `likes` WHERE review_id = ? AND user_id = ?", [$obj->id, $_SESSION['user']['id']]);
-                        if ($like == false) {
+                        $like = DB::fetch("SELECT * FROM `likes` WHERE review_id = ? AND user_id = ?", [$obj->id, user()->id]);
+                        if (!$like) {
                             echo "<a href='./like.php?id={$obj->id}' class='like-btn'>공감</a>";
                         }
                     ?>
@@ -77,7 +63,7 @@ ORDER BY (SELECT COUNT(likes.id) FROM likes WHERE likes.review_id = reviews.id) 
                     <!-- replies0 클래스는 왼쪽, replies1 클래스는 오른쪽에 답변을 답니다. 
                         i - page*2를 해주어 왼쪽 리뷰의 답변인지 오른쪽 리뷰의 답변인지 구합니다.
                     -->
-                    <div class="replies replies<?=$i-$_GET['page'] * 2?>">
+                    <div class="replies replies<?=$i-$page * 2?>">
                         <?=print_text($obj->replies)?>
                     </div>
                 <?php endif;?>
@@ -99,7 +85,7 @@ ORDER BY (SELECT COUNT(likes.id) FROM likes WHERE likes.review_id = reviews.id) 
 $list = DB::fetchAll("
 SELECT breads.id, breads.name, breads.price, breads.image, breads.sale
 FROM breads
-WHERE breads.store_id = ?;", [$_GET['id']]);
+WHERE breads.store_id = ?;", [$pageId]);
 ?>
 
 
@@ -110,12 +96,12 @@ WHERE breads.store_id = ?;", [$_GET['id']]);
             <div class="title">주문</div>
         </div>
 
-        <form action="./order_ok.php" method="post">
+        <form action="/order/order" method="post">
 
             <!-- 주문할 수 있는 상품의 id를 모두 불러옵니다. (공백으로 구분) -->
             <input type="hidden" name="id-list" value="<?php foreach ($list as $obj) : ?><?= $obj->id ?> <?php endforeach; ?>">      
             <!-- 주문하고자 하는 가게를 주문할때 알 수 있도록 합니다. (공백으로 구분) -->
-            <input type="hidden" name="store" value="<?= $_GET['id'] ?>">
+            <input type="hidden" name="store" value="<?= $pageId ?>">
 
             <div class="product-grid">
                 <?php foreach ($list as $obj) : ?>
@@ -160,13 +146,13 @@ WHERE breads.store_id = ?;", [$_GET['id']]);
             <div class="title">예약</div>
         </div>
 
-        <form action="./reservation.php" method="post">
+        <form action="/order/reserve" method="post">
             <div class="d-flex justify-content-center">
                 <!-- 예약 영역에선 연도-월-일과 시간을 설정할 수 있어야하기 떄문에 date타입 input과 time타입 input이 존재해야합니다. -->
                 <input type="date" name="date" required>
                 <input type="time" name="time" required>
                 <!-- 전달할때 stores의 id를 같이 보내줘야합니다. -->
-                <input type="hidden" name="store" value="<?= $_GET['id'] ?>">
+                <input type="hidden" name="store" value="<?= $pageId ?>">
             </div>
 
             <div class="d-flex justify-content-center m-5">
@@ -176,7 +162,3 @@ WHERE breads.store_id = ?;", [$_GET['id']]);
     </div>
 </section>
 <!-- //예약영역 -->
-
-<?php
-require_once('./resources/php/footer.php');
-?>

@@ -1,7 +1,7 @@
 <?php
 
 namespace src\Controller;
-
+use src\App\DB;
 class ReserveController{
     function insert(){
         extract($_POST);
@@ -11,7 +11,7 @@ class ReserveController{
         DB::fetch("
         INSERT INTO `reservations`(`store_id`, `user_id`, `request_at`, `reservation_at`, `state`)
         VALUES (?, ?, NOW(), ?, 'order')
-        ", [$_POST['store'], $_SESSION['user']['id'], $date]);
+        ", [$_POST['store'], user()->id, $date]);
 
         back("예약 주문 되었습니다");
     }

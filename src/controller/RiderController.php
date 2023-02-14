@@ -1,6 +1,8 @@
 <?php
 
-namespace Controller;
+namespace src\Controller;
+
+use src\App\DB;
 
 class RiderController{
     function reflect(){
@@ -60,5 +62,33 @@ class RiderController{
         
         // 주문페이지로 돌아갑니다
         back('주문되었습니다.');
+    }
+    function infoInit(){
+        extract($_POST);
+
+        $id = $_POST['id']; // 유저 아이디
+        $transportation = $_POST['transportation']; // 교통수단
+        $location = $_POST['location']; // 위치 id
+
+        DB::fetch("UPDATE users SET transportation='{$transportation}', location_id='{$location}' WHERE id='{$id}'");
+        back("성공적으로 수정되었습니다.");
+    }
+    function taking(){
+        extract($_POST);
+        
+        $id = $_POST['id'];
+        $user_id = user()->id;
+
+        DB::fetch("UPDATE deliveries SET driver_id = '{$user_id}', state = 'taking' WHERE id = '{$id}'");
+        back('성공적으로 수락되었습니다. 안전한 배달 되십시오.');
+    }
+    function complete(){
+        extract($_POST);
+
+        $id = $_POST['id'];
+        $user_id = user()->id;
+
+        DB::fetch("UPDATE deliveries SET state = 'complete' WHERE id = '{$id}'");
+        back('배달이 완료되었습니다.');
     }
 }

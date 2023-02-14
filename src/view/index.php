@@ -53,7 +53,9 @@
             </div>
             <div class="intro detail">
                 <div class="gray_scale"><span></span></div>
-                <img src="./resources/img/26.jpg" alt="">
+                <img src="./resources/img/26.jpg" class="target" alt="">
+                <img src="./resources/img/12.jpg" class="target" alt="">
+                <!-- <img src="./resources/img/27.jpg" alt=""> -->
                 <div class="t-cover">
                     <h3 class="intro detail title">소개</h3>
                     <p class="intro more">
@@ -80,8 +82,8 @@
             </div>
             <div class="contents">
                 <div class="evt imgs">
-                    <img src="./resources/img/이벤트소개이미지/event_1.jpg" alt="빵지순례 이벤트 안내 이미지" title="빵지순례 이벤트 안내 이미지">
-                    <img src="./resources/img/이벤트소개이미지/event_2.jpg" alt="대전빵집 맛 평가 이벤트 안내 이미지" title="대전빵집 맛 평가 이벤트 안내 이미지">
+                    <img src="./resources/img/이벤트소개이미지/event_1.jpg" class='target'alt="빵지순례 이벤트 안내 이미지" title="빵지순례 이벤트 안내 이미지">
+                    <img src="./resources/img/이벤트소개이미지/event_2.jpg" class='target'alt="대전빵집 맛 평가 이벤트 안내 이미지" title="대전빵집 맛 평가 이벤트 안내 이미지">
                 </div>
             </div>
         </div>
@@ -106,7 +108,7 @@
                         <h1>공지사항</h1>
                         <div class="border-line"><span></span></div>
                     </div>
-                    <div class="news cell-item">
+                    <div class="news cell-item target">
                         <div class="news hdr d-flex justify-content-between">
                             <p class="news type">공지사항</p>
                             <p class="news date">2021-09-15</p>                            
@@ -120,7 +122,7 @@
                             <label for="heart"><i class="fa fa-2x fa-heart"></i></label>
                         </div>
                     </div>
-                    <div class="news cell-item">
+                    <div class="news cell-item target">
                         <div class="news hdr d-flex justify-content-between">
                             <p class="news type">공지사항</p>
                             <p class="news date">2021-09-15</p>                            
@@ -134,7 +136,7 @@
                             <label for="heart2"><i class="fa fa-2x fa-heart"></i></label>
                         </div>
                     </div>
-                    <div class="news cell-item">
+                    <div class="news cell-item target">
                         <div class="news hdr d-flex justify-content-between">
                             <p class="news type">공지사항</p>
                             <p class="news date">2021-09-15</p>                            
@@ -148,7 +150,7 @@
                             <label for="heart3"><i class="fa fa-2x fa-heart"></i></label>
                         </div>
                     </div>
-                    <div class="news cell-item">
+                    <div class="news cell-item target">
                         <div class="news hdr d-flex justify-content-between">
                             <p class="news type">공지사항 </p>
                             <p class="news date">2021-09-15</p>                            
@@ -162,7 +164,7 @@
                             <label for="heart4"><i class="fa fa-2x fa-heart"></i></label>
                         </div>
                     </div>
-                    <div class="news cell-item">
+                    <div class="news cell-item target">
                         <div class="news hdr d-flex justify-content-between">
                             <p class="news type">공지사항</p>
                             <p class="news date">2021-09-15</p>                            
@@ -182,7 +184,7 @@
                         <h1>소통과 참여</h1>
                         <div class="border-line"><span></span></div>
                     </div>
-                    <div class="news cell-item">
+                    <div class="news cell-item target">
                         <div class="news hdr d-flex justify-content-between">
                             <p class="news type">소통과 참여</p>
                             <p class="news date">2021-09-15</p>                            
@@ -196,7 +198,7 @@
                             <label for="heart6"><i class="fa fa-2x fa-heart"></i></label>
                         </div>
                     </div>
-                    <div class="news cell-item">
+                    <div class="news cell-item target">
                         <div class="news hdr d-flex justify-content-between">
                             <p class="news type">소통과 참여</p>
                             <p class="news date">2021-09-15</p>                            
@@ -210,7 +212,7 @@
                             <label for="heart7"><i class="fa fa-2x fa-heart"></i></label>
                         </div>
                     </div>
-                    <div class="news cell-item">
+                    <div class="news cell-item target">
                         <div class="news hdr d-flex justify-content-between">
                             <p class="news type">소통과 참여</p>
                             <p class="news date">2021-09-15</p>                            
@@ -224,7 +226,7 @@
                             <label for="heart8"><i class="fa fa-2x fa-heart"></i></label>
                         </div>
                     </div>
-                    <div class="news cell-item">
+                    <div class="news cell-item target">
                         <div class="news hdr d-flex justify-content-between">
                             <p class="news type">소통과 참여</p>
                             <p class="news date">2021-09-15</p>                            
@@ -238,7 +240,7 @@
                             <label for="heart9"><i class="fa fa-2x fa-heart"></i></label>
                         </div>
                     </div>
-                    <div class="news cell-item">
+                    <div class="news cell-item target">
                         <div class="news hdr d-flex justify-content-between">
                             <p class="news type">소통과 참여</p>
                             <p class="news date">2021-09-15</p>                            

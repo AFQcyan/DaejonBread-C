@@ -1,7 +1,6 @@
 <?php
 
-require_once('./resources/php/header.php');
-
+use src\App\DB;
 // 할인률이 0보다 큰 상품의 가격, 할인률, 이미지. 빵집 이름. 빵집 아이디를 불러옵니다.
 // 세일률을 기준으로 내림차순 정렬을 합니다.
 $list = DB::fetchAll('
@@ -41,8 +40,3 @@ ORDER BY breads.sale DESC
         </div>
     </section>
     <!-- //할인 이벤트 영역 -->
-
-
-<?php
-require_once('./resources/php/footer.php');
-?>

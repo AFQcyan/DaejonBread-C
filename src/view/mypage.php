@@ -726,7 +726,7 @@ elseif (user()->type == 'rider') :
             </div>
 
             <div>
-                <form action= "./change_userinfo.php" method="POST">
+                <form action= "/update/trans" method="POST">
                     <input type="hidden" name="id" value="<?= user()->id ?>">
                     <div class="d-flex justify-content-center">
                         <!-- 내 교통수단이나 위치를 변경할 수 있는 영역입니다. 내 정보 수정을 누르면 수정됩니다. -->
@@ -786,7 +786,7 @@ elseif (user()->type == 'rider') :
             </div>
 
             <div>
-                <table class="table table-bordered">
+                <table class="table table-bordered deliver_list">
                     <thead>
                         <tr>
                             <th>
@@ -797,9 +797,6 @@ elseif (user()->type == 'rider') :
                             </th>
                             <th>
                                 배달 주소
-                            </th>
-                            <th>
-                                도착 예정 시간
                             </th>
                             <th>
                                 빵 종류 및 가격, 수량
@@ -817,15 +814,6 @@ elseif (user()->type == 'rider') :
                                 <td><?= $log->orderer_location ?></td>
                                 <td>
                                     <?php
-                                    // 받은, 받았던 주문일시 예상시간을 출력합니다.
-                                    if ($log->state == 'taking' || $log->state == 'complete') {
-                                        echo getTime(getMin($distance, $log->orderer_location_id, $log->store_location_id) + /**/getMin($distance, user()->location_id, $log->store_location_id), $log->taking_at,  user()->transportation);
-                                    }
-                                    ?>
-
-                                </td>
-                                <td>
-                                    <?php
                                     // 상품의 아이디 리스트, 상품의 수량 리스트, 상품의 가격 리스트를 문자열에서 배열로 변환합니다. (구분자 : ,)
                                     $idList = explode(',', $log->id);
                                     $cnt = explode(',', $log->bread_cnt);
@@ -838,18 +826,18 @@ elseif (user()->type == 'rider') :
                                     }
                                     ?>
                                 </td>
-                                <td>
+                                <td class='deliver_state'>
                                     <!-- 배달 상태에 따라 출력하는 버튼 또는 텍스트를 다르게 합니다. -->
                                     <!-- 사장이 주문 접수를 했다면 수락버튼이 뜨고 -->
                                     <!-- 내가 수락한 주문이라면 완료버튼이 뜹니다 -->
                                     <!-- 그 이외에 주문은 완료한 배달이므로 '완료한 배달'이라는 텍스트가 씁니다. -->
                                     <?php if ($log->state == 'accept') : ?>
-                                        <form action= "./taking.php" method="post">
+                                        <form action= "/update/accept" method="post">
                                             <input type="hidden" name="id" value="<?= $log->deliveries_id ?>">
                                             <input class="button buttonhlt" type="submit" value="수락">
                                         </form>
                                     <?php elseif ($log->state == 'taking') : ?>
-                                        <form action= "./complete.php" method="post">
+                                        <form action= "/update/complete" method="post">
                                             <input type="hidden" name="id" value="<?= $log->deliveries_id ?>">
                                             <input class="button buttonhlt" type="submit" value="완료">
                                         </form>

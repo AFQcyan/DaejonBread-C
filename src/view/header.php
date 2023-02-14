@@ -19,13 +19,13 @@
             <nav>
                 <ul class="menu d-none d-lg-flex">
                     <li>
-                        <a href="./sub.php">대전 빵집</a>
+                        <form action="/sub" method="post"><input type="submit" value="대전 빵집"></form>
                     </li>
                     <li>
                         <a href="./stamp.php">스탬프</a>
                     </li>
                     <li>
-                        <a href="./discount.php">할인 이벤트</a>
+                        <a href="/discount">할인 이벤트</a>
                     </li>
                     <li>
                         <a href="/myPage">마이 페이지</a>
@@ -61,7 +61,7 @@
                     <a href="./stamp.html">스탬프</a>
                 </li>
                 <li>
-                    <a href="#">할인 이벤트</a>
+                    <a href="/discount">할인 이벤트</a>
                 </li>
                 <li>
                     <a href="/myPage">마이 페이지</a>
