@@ -1422,3 +1422,7 @@ tbody{
 .deliver_list{
     height: 100%;
 }
+.top5, .bread_list{
+    border: 1px solid white;
+    z-index: 3;
+}

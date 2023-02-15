@@ -19,7 +19,7 @@
             <nav>
                 <ul class="menu d-none d-lg-flex">
                     <li>
-                        <form action="/sub" method="post"><input type="submit" value="대전 빵집"></form>
+                        <form action="/sub" method="get"><input type="submit" value="대전 빵집"></form>
                     </li>
                     <li>
                         <a href="./stamp.php">스탬프</a>

@@ -50,4 +50,13 @@ class ReviewController{
 
         back('등록 되었습니다');
     }
+    function like(){
+        extract($_POST);
+        if(is_null($_POST['id'])){
+            back('잘못된 경로 입니다.');
+            exit;
+        }
+        DB::fetch("INSERT INTO likes(user_id, review_id) VALUES (?,?)", [user()->id, $_POST['id']]);
+        back('성공적으로 공감하였습니다.');
+    }
 }

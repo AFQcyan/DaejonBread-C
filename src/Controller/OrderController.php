@@ -69,25 +69,28 @@
             back("주문이 성공적으로 거절되었습니다.");
         }
         function build(){
-            extract($_POST);
-            $id = $_POST['id'];
-            $page =  $_POST['page'];
+            $data = $_POST;
+            $id = isset($data['id']) ? $data['id'] : '';
+            $page =  isset($data['page']) ? $data['page'] : '';
 
-            if (!(isset($_POST['page']) && isset($_POST['id']))) {
-                echo '잘못된 접근 입니다.';
-                exit;
-            }
-            
-            $pageId = $_POST['id'];
-            
-            if (!isset($_SESSION['user'])) {
-                header('location: ./login.php');
-                exit;
-            }
-            $datas['title'] = '주문';
-            $datas['pageId'] = $pageId;
-            $datas['page'] = $page;
-            view('order', $datas);
+
+            $list = DB::fetchAll("
+            SELECT reviews.*, users.name,
+            (SELECT COUNT(likes.id) FROM likes WHERE likes.review_id = reviews.id) as count,
+            replies.contents replies
+
+            FROM stores, users, reviews LEFT JOIN replies ON replies.review_id = reviews.id
+
+            WHERE stores.id = reviews.store_id
+            AND users.id = reviews.user_id
+            AND store_id = ?
+
+            GROUP BY reviews.id
+            ORDER BY (SELECT COUNT(likes.id) FROM likes WHERE likes.review_id = reviews.id) DESC;
+            ", [$id]);
+
+            echo json_encode(array('result' => $list));
+            exit;        
         }
     }
 

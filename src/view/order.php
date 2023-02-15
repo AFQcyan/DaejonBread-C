@@ -2,26 +2,23 @@
 
 use src\App\DB;
 
-
-// stores의 id가 get으로 받아온 id와 동일한 가게의 리뷰 리스트를 전부 가져옵니다.
-// (페이지를 분할하는건 limit를 사용하지 않고 단순히 모두 불러온 후 출력할떄 get으로 받아온 page에 맞는 리뷰만을 출력합니다.)
-// 답글은 left join해서 답글이 달려있지 않을때도 리뷰가 가져와지도록 합니다.
 $list = DB::fetchAll("
-SELECT reviews.*, users.name,
-(SELECT COUNT(likes.id) FROM likes WHERE likes.review_id = reviews.id) as count,
-replies.contents replies
+            SELECT reviews.*, users.name,
+            (SELECT COUNT(likes.id) FROM likes WHERE likes.review_id = reviews.id) as count,
+            replies.contents replies
 
-FROM stores, users, reviews LEFT JOIN replies ON replies.review_id = reviews.id
+            FROM stores, users, reviews LEFT JOIN replies ON replies.review_id = reviews.id
 
-WHERE stores.id = reviews.store_id
-AND users.id = reviews.user_id
-AND store_id = ?
+            WHERE stores.id = reviews.store_id
+            AND users.id = reviews.user_id
+            AND store_id = ?
 
-GROUP BY reviews.id
-ORDER BY (SELECT COUNT(likes.id) FROM likes WHERE likes.review_id = reviews.id) DESC;
-", [$pageId]);
+            GROUP BY reviews.id
+            ORDER BY (SELECT COUNT(likes.id) FROM likes WHERE likes.review_id = reviews.id) DESC;
+            ", [$pageId]);
+
+
 ?>
-
 <!-- 리뷰 영역 -->
 <section id="review" class="main-section">
     <div class="container">
@@ -52,7 +49,10 @@ ORDER BY (SELECT COUNT(likes.id) FROM likes WHERE likes.review_id = reviews.id) 
                         // 만약 해당 리뷰에 공감을 하지 않았다면 공감을 할 수 있는 버튼을 출력합니다.
                         $like = DB::fetch("SELECT * FROM `likes` WHERE review_id = ? AND user_id = ?", [$obj->id, user()->id]);
                         if (!$like) {
-                            echo "<a href='./like.php?id={$obj->id}' class='like-btn'>공감</a>";
+                            echo "<form action='/like' method='post'>
+                            <input type='hidden' name='id' class='button buttonhlt' value='" . $obj->id . "'>
+                            <input type='submit' class='button buttonhlt'value='공감'>
+                            </form>";
                         }
                     ?>
                     <!-- 공감갯수, 작성일자를 출력합니다. -->
@@ -73,7 +73,10 @@ ORDER BY (SELECT COUNT(likes.id) FROM likes WHERE likes.review_id = reviews.id) 
         <ul class="pagination d-flex justify-content-center">
             <!-- 페이지의 수 만큼 페이지 버튼을 출력합니다. -->
             <?php for ($i = 0; $i < count($list) / 2; $i++) : ?>
-                <li class="page-item"><a class="page-link" href="./order.php?id=<?=$pageId?>&page=<?=$i?>"><?= $i + 1 ?></a></li>
+                <form action="/order" method="post"></form><li class="page-item"><button type='submit' class="btn"><?= $i + 1 ?></a>
+                <input type="hidden" name="page" value='<?php $i + 1?>'>
+                <input type="hidden" name="id" value='<?php $obj->id ?>'>
+            </li>
             <?php endfor; ?>
         </ul>
     </div>
