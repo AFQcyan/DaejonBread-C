@@ -691,7 +691,7 @@ elseif (user()->type == 'rider') :
     deliveries.id as deliveries_id,  " .
     // 주문 일시, 주문 수락 일시, 주문 상태, 주문 아이디를 불러옵니다.
     "(SELECT GROUP_CONCAT(delivery_items.bread_id) FROM delivery_items WHERE delivery_items.delivery_id = deliveries.id) as id,
-    (SELECT GROUP_CONCAT(delivery_items.cnt) FROM breads, delivery_items WHERE breads.id = delivery_items.bread_id AND delivery_items.delivery_id = deliveries.id) as bread_cnt,
+    (SELECT GROUP_CONCAT(delivery_items.cnt) FROM breads, delivery_items WHERE breads.id = delivery_items.bread_id A(SELEND delivery_items.delivery_id = deliveries.id) as bread_cnt,
     (SELECT GROUP_CONCAT(delivery_items.price) FROM breads, delivery_items WHERE breads.id = delivery_items.bread_id AND delivery_items.delivery_id = deliveries.id) as bread_price  " .
     // 상품의 아이디 리스트, 상품의 수량 리스트, 상품의 가격 리스트를 가져옵니다. 
     
